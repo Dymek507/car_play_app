@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Auto Test</string>
+    <string name="title">Android Auto – test połączenia</string>
+    <string name="status_checking">Status: sprawdzam…</string>
+    <string name="howto">Jak testować:\n1. Android Auto → Ustawienia → wersja (10× tap) → tryb dewelopera.\n2. Menu ⋮ → Ustawienia dewelopera → włącz „Nieznane źródła”.\n3. Podłącz telefon do auta (lub uruchom DHU). Aplikacja „Auto Test” pojawi się w launcherze Android Auto.\n\nEkran w aucie pokaże host, poziom API i licznik kliknięć – jeśli go widzisz, połączenie działa.</string>
+</resources>
