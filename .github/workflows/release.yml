@@ -1,0 +1,74 @@
+# Buduje podpisany APK po każdym pushu.
+# - push na main / ręczne uruchomienie: publikuje GitHub Release "v1.0.<versionCode>" z plikiem APK,
+#   z którego aplikacja pobiera aktualizację (patrz Updater.kt).
+# - push na inne gałęzie: tylko artefakt workflow (do ręcznego pobrania ze strony Actions).
+name: Build & Release APK
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # pełna historia – versionCode = liczba commitów
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: "platforms;android-34 build-tools;34.0.0 platform-tools"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Wersja
+        id: version
+        run: |
+          CODE=$(git rev-list --count HEAD)
+          echo "code=$CODE" >> "$GITHUB_OUTPUT"
+          echo "name=1.0.$CODE" >> "$GITHUB_OUTPUT"
+          echo "versionCode=$CODE versionName=1.0.$CODE"
+
+      - name: Build release APK
+        env:
+          # Opcjonalny secret: fine-grained PAT z uprawnieniem "Contents: read" na to repo.
+          # Potrzebny tylko, gdy repo jest prywatne – aplikacja używa go do pobierania wydań.
+          UPDATE_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+          UPDATE_REPO: ${{ github.repository }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon --console=plain
+          cp app/build/outputs/apk/release/app-release.apk "AutoTest-v${{ steps.version.outputs.name }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AutoTest-v${{ steps.version.outputs.name }}
+          path: AutoTest-v${{ steps.version.outputs.name }}.apk
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.name }}
+          name: Auto Test ${{ steps.version.outputs.name }}
+          body: |
+            Automatyczne wydanie z commita ${{ github.sha }}.
+
+            ${{ github.event.head_commit.message }}
+          files: AutoTest-v${{ steps.version.outputs.name }}.apk
+          make_latest: true

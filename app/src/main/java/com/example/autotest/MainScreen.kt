@@ -21,6 +21,22 @@ class MainScreen(carContext: CarContext) : Screen(carContext) {
     private var clicks = 0
     private val startedAt = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
+    init {
+        // Odświeżaj wiersz „Wersja” gdy zmieni się stan aktualizatora.
+        Updater.state.observe(this) { invalidate() }
+        Updater.checkAsync()
+    }
+
+    private fun updateRowText(): String = when (val s = Updater.state.value) {
+        Updater.State.Checking -> "Sprawdzam aktualizacje…"
+        Updater.State.UpToDate -> "Aktualna. Dotknij, aby sprawdzić ponownie"
+        is Updater.State.Available -> "Dostępna ${s.info.versionName} – otwórz aplikację na telefonie"
+        is Updater.State.Downloading -> "Pobieranie ${s.info.versionName}: ${s.percent}%"
+        is Updater.State.Downloaded -> "${s.info.versionName} pobrana – zainstaluj na telefonie"
+        is Updater.State.Error -> "Błąd sprawdzania: ${s.message}"
+        else -> "Dotknij, aby sprawdzić aktualizacje"
+    }
+
     override fun onGetTemplate(): Template {
         val host = carContext.hostInfo
         val hostName = host?.packageName ?: "nieznany"
@@ -49,6 +65,16 @@ class MainScreen(carContext: CarContext) : Screen(carContext) {
                 Row.Builder()
                     .setTitle("Sesja uruchomiona")
                     .addText(startedAt)
+                    .build()
+            )
+            .addItem(
+                Row.Builder()
+                    .setTitle("Wersja aplikacji: ${Updater.currentVersionName}")
+                    .addText(updateRowText())
+                    .setOnClickListener {
+                        Updater.checkAsync(force = true)
+                        CarToast.makeText(carContext, "Sprawdzam aktualizacje…", CarToast.LENGTH_SHORT).show()
+                    }
                     .build()
             )
             .addItem(

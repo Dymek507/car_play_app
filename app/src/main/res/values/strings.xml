@@ -2,6 +2,26 @@
 <resources>
     <string name="app_name">Auto Test</string>
     <string name="title">Android Auto – test połączenia</string>
+    <string name="version_fmt">Wersja %1$s (kod %2$d)</string>
     <string name="status_checking">Status: sprawdzam…</string>
     <string name="howto">Jak testować:\n1. Android Auto → Ustawienia → wersja (10× tap) → tryb dewelopera.\n2. Menu ⋮ → Ustawienia dewelopera → włącz „Nieznane źródła”.\n3. Podłącz telefon do auta (lub uruchom DHU). Aplikacja „Auto Test” pojawi się w launcherze Android Auto.\n\nEkran w aucie pokaże host, poziom API i licznik kliknięć – jeśli go widzisz, połączenie działa.</string>
+
+    <string name="update_section">Aktualizacje</string>
+    <string name="update_idle">Aktualizacje sprawdzane są przy uruchomieniu aplikacji.</string>
+    <string name="update_checking">Sprawdzam dostępność nowej wersji…</string>
+    <string name="update_up_to_date">Masz najnowszą wersję.</string>
+    <string name="update_available">Dostępna nowa wersja %1$s.</string>
+    <string name="update_downloading">Pobieram %1$s… %2$d%%</string>
+    <string name="update_downloaded">Wersja %1$s pobrana – gotowa do instalacji.</string>
+    <string name="update_error">Błąd aktualizacji: %1$s</string>
+    <string name="update_check">Sprawdź aktualizacje</string>
+    <string name="update_download">Pobierz</string>
+    <string name="update_install">Zainstaluj</string>
+    <string name="update_later">Później</string>
+    <string name="update_file_missing">Pobrany plik zniknął – sprawdzam ponownie.</string>
+    <string name="update_dialog_title">Aktualizacja %1$s</string>
+    <string name="update_dialog_msg">Zainstalowana: %1$s\nDostępna: %2$s\n\nPobrać teraz? Instalacja nadpisze aplikację bez odinstalowywania.</string>
+    <string name="update_perm_title">Zezwól na instalację</string>
+    <string name="update_perm_msg">Android wymaga jednorazowej zgody na instalowanie aplikacji z tego źródła. Po włączeniu wróć tutaj i dotknij „Zainstaluj”.</string>
+    <string name="update_perm_open">Otwórz ustawienia</string>
 </resources>
