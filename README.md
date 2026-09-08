@@ -29,6 +29,27 @@ inaczej build użyje wersji 1.
    aplikacji spoza Sklepu Play).
 4. Zainstaluj APK (`build.bat` albo `adb install -r app-debug.apk`).
 
+## Debugowanie bezprzewodowe (adb przez Wi‑Fi)
+
+Po skonfigurowaniu `build.bat`, `dhu.bat` i `logcat` działają bez kabla – adb nie rozróżnia,
+czy telefon jest po USB, czy po Wi‑Fi. Telefon i PC muszą być w tej samej sieci.
+
+Android 11+ (Note 20 Ultra ma Androida 13):
+
+1. Telefon: Ustawienia → Opcje programisty → **Debugowanie bezprzewodowe** → włącz.
+2. Pierwszy raz na danym PC: na telefonie **„Sparuj urządzenie za pomocą kodu parowania”**,
+   na PC `adb-wifi.bat pair` i przepisz adres IP:port oraz 6‑cyfrowy kod z telefonu.
+3. Potem (i przy każdym kolejnym połączeniu): `adb-wifi.bat` i przepisz adres IP:port
+   z głównego ekranu „Debugowanie bezprzewodowe” (port jest inny niż przy parowaniu
+   i zmienia się po restarcie telefonu).
+4. `adb devices` powinno pokazać telefon jako `192.168.x.x:port  device`.
+
+Starsza metoda (dowolny Android, wymaga kabla na start): `adb-wifi.bat usb` – przełącza adb
+na porcie 5555 i łączy się po IP telefonu; po tym kabel można odłączyć.
+
+Rozłączenie: `adb-wifi.bat off`. Jeśli połączenie „znika”, najczęstsze przyczyny to
+oszczędzanie baterii dla Wi‑Fi, zmiana portu po restarcie albo różne sieci (np. gość / 5 GHz z izolacją klientów).
+
 ## Test w samochodzie
 
 Podłącz telefon do auta (kabel / bezprzewodowo). W launcherze Android Auto pojawi się
