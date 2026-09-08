@@ -29,6 +29,17 @@ inaczej build użyje wersji 1.
    aplikacji spoza Sklepu Play).
 4. Zainstaluj APK (`build.bat` albo `adb install -r app-debug.apk`).
 
+## Sprawdzenie połączenia
+
+```
+check.bat
+```
+
+Skrypt sprawdza po kolei: czy `adb` jest w PATH, czy telefon jest widoczny i autoryzowany,
+model i wersję Androida, czy „Auto Test” jest zainstalowany i w jakiej wersji, oraz czy jest
+Android Auto. Przy braku urządzenia wypisuje listę rzeczy do sprawdzenia (kabel do danych,
+debugowanie USB, tryb MTP, sterowniki). Działa tak samo dla połączenia po kablu i po Wi‑Fi.
+
 ## Debugowanie bezprzewodowe (adb przez Wi‑Fi)
 
 Po skonfigurowaniu `build.bat`, `dhu.bat` i `logcat` działają bez kabla – adb nie rozróżnia,
